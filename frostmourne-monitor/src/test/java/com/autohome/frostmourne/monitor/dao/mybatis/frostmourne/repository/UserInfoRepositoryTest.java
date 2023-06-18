@@ -22,7 +22,7 @@ import org.springframework.test.context.ActiveProfiles;
  * @date 2020-08-26
  */
 @MybatisTest
-@ActiveProfiles("test")
+@ActiveProfiles("local")
 @Import(UserInfoRepository.class)
 class UserInfoRepositoryTest {
 

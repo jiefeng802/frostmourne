@@ -37,6 +37,7 @@ public class UserController {
 
     @RequestMapping(value = "/info", method = RequestMethod.GET)
     public Protocol<AccountInfo> info() {
+        System.out.println("test++++++++++++++++");
         AccountInfo account = AuthTool.currentUser();
         return new Protocol<>(account);
     }
@@ -44,16 +45,23 @@ public class UserController {
     @PermissionLimit(limit = false)
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Protocol<String> login(@RequestBody LoginInfo loginInfo) {
+        System.out.println("test----------------" + loginInfo.getUsername() + " " + loginInfo.getPassword());
+//        throw new ProtocolException(580, "用户名或密码错误");
         boolean valid = authService.validate(loginInfo.getUsername(), loginInfo.getPassword());
         if (!valid) {
             throw new ProtocolException(580, "用户名或密码错误");
         }
+        System.out.println("test3----------------");
         Optional<AccountInfo> optionalAccountInfo = accountService.findByAccount(loginInfo.getUsername());
-        if (!optionalAccountInfo.isPresent()) {
+
+        System.out.println("test4----------------");if (!optionalAccountInfo.isPresent()) {
             //默认自动添加用户基本信息
             userInfoService.addByLoginInfo(loginInfo);
         }
+        System.out.println("test5----------------");
+        System.out.println("test2-------");
         String token = jwtToken.generateToken(optionalAccountInfo.get());
+        System.out.println("test3-------");
         return new Protocol<>(token);
     }
 

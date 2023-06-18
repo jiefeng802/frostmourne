@@ -1,14 +1,25 @@
 version: '3.6'
 services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - 3306:3306
+    volumes:
+      - D:\BackEndProject\frostmourne\doc\docker\mydata:/var/lib/mysql
   frostmourne-monitor:
-    image: registry.cn-hangzhou.aliyuncs.com/kechangqing/frostmourne:1.0
+    image: frostmourne/frostmourne
     container_name: frostmourne-monitor
     environment:
       datasource_frostmourne_url: jdbc:mysql://host.docker.internal:3306/frostmourne?useSSL=false&verifyServerCertificate=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=GMT%2B8
       datasource_frostmourne_username: root
-      datasource_frostmourne_password: example
+      datasource_frostmourne_password: root
       frostmourne_monitor_address: http://localhost:10054
-      initial_password:
+      initial_password: 123456
       alarmlog_reserve_days: 30
       ldap_enabled: 'false'
       spring_ldap_urls:

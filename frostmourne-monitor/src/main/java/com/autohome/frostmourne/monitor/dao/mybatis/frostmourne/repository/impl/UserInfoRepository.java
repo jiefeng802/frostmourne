@@ -57,6 +57,12 @@ public class UserInfoRepository implements IUserInfoRepository {
 
     @Override
     public Optional<UserInfo> findByAccount(String account) {
-        return userInfoDynamicMapper.selectOne(query -> query.where().and(UserInfoDynamicSqlSupport.account, isEqualTo(account)));
+        System.out.println("test6 = " + account);
+
+//        alertLogDynamicMapper.selectByPrimaryKey(1L);
+//        Optional<UserInfo> obj = null;
+        Optional<UserInfo> obj = userInfoDynamicMapper.selectOne(query -> query.where().and(UserInfoDynamicSqlSupport.account, isEqualTo(account)));
+        System.out.println("test7 = " + obj.toString());
+        return obj;
     }
 }

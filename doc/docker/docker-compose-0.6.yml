@@ -6,7 +6,7 @@ services:
     environment:
       spring_datasource_url: jdbc:mysql://host.docker.internal:3306/xxl_job?Unicode=true&characterEncoding=UTF-8
       spring_datasource_username: root
-      spring_datasource_password: example
+      spring_datasource_password: root
       spring_mail_host: smtp.qq.com
       spring_mail_port: 25
       spring_mail_username: xxx@qq.com
@@ -28,7 +28,7 @@ services:
     environment:
       datasource_frostmourne_url: jdbc:mysql://host.docker.internal:3306/frostmourne?useSSL=false&verifyServerCertificate=false&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=GMT%2B8
       datasource_frostmourne_username: root
-      datasource_frostmourne_password: example
+      datasource_frostmourne_password: root
       xxljob_admin_addresses: http://xxl-job:10052/xxl-job-admin
       xxljob_executor_id: 2
       xxljob_executor_logpath: /opt/frostmourne/frostmourne-monitor/10054/log

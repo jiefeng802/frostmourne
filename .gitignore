@@ -37,3 +37,4 @@ yarn.lock
 package-lock.json
 tests/**/coverage/
 
+doc/docker/mydata/

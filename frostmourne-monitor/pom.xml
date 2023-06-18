@@ -24,6 +24,8 @@
         <opencsv.version>2.3</opencsv.version>
         <clickhouse-jdbc.version>0.3.1</clickhouse-jdbc.version>
         <mysql.version>8.0.28</mysql.version>
+        <docker.maven.plugin.version>0.40.0</docker.maven.plugin.version>
+        <docker.host>http://localhost:2375</docker.host>
     </properties>
 
     <dependencies>
@@ -319,6 +321,13 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin><!--编译跳过测试文件检查的生命周期-->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
@@ -337,7 +346,50 @@
                     </execution>
                 </executions>
             </plugin>
-
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>${docker.maven.plugin.version}</version>
+                <executions>
+                    <!--如果想在项目打包时构建镜像添加-->
+                    <execution>
+                        <id>build-image</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- Docker 远程管理地址-->
+                    <dockerHost>${docker.host}</dockerHost>
+                    <images>
+                        <image>
+                            <!--定义镜像名称-->
+                            <name>frostmourne/frostmourne</name>
+                            <!--定义镜像构建行为-->
+                            <build>
+                                <!--定义基础镜像-->
+                                <from>openjdk:8</from>
+                                <args>
+                                    <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+                                </args>
+                                <!--定义哪些文件拷贝到容器中-->
+                                <assembly>
+                                    <!--定义拷贝到容器的目录-->
+                                    <targetDir>/</targetDir>
+                                    <!--只拷贝生成的jar包-->
+                                    <descriptorRef>artifact</descriptorRef>
+                                </assembly>
+                                <!--定义容器启动命令-->
+                                <entryPoint>["java", "-jar","-Dspring.profiles.active=prod","/${project.build.finalName}.jar"]</entryPoint>
+                                <!--定义维护者-->
+                                <maintainer>macrozheng</maintainer>
+                            </build>
+                        </image>
+                    </images>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
